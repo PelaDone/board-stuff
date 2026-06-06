@@ -1,0 +1,54 @@
+---
+import { getAllGames } from '../lib/db';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GameCard from '../components/GameCard';
+
+const games = await getAllGames();
+---
+
+<BaseLayout title="Inicio">
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-24 px-4 sm:px-6 text-center">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.12),transparent)]" />
+    <div class="relative max-w-3xl mx-auto">
+      <p class="text-amber-400 text-sm font-medium tracking-widest uppercase mb-4">Bienvenidos</p>
+      <h1 class="font-display text-5xl sm:text-7xl font-black tracking-tight text-white mb-6">
+        Board<span class="text-amber-400">Stuff</span>
+      </h1>
+      <p class="text-zinc-400 text-lg sm:text-xl leading-relaxed max-w-xl mx-auto">
+        Reglas, personajes y mecánicas de los juegos de mesa de nuestro grupo. Todo en un solo lugar.
+      </p>
+    </div>
+  </section>
+
+  <!-- Games grid -->
+  <section id="juegos" class="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+    <h2 class="font-display text-2xl font-bold text-zinc-200 mb-8">
+      Juegos <span class="text-zinc-500 font-normal text-lg">({games.length})</span>
+    </h2>
+
+    {games.length === 0 ? (
+      <div class="text-center py-20 text-zinc-600">
+        <p class="text-5xl mb-4">🎲</p>
+        <p class="text-lg">No hay juegos todavía.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {games.map((game, i) => (
+          <GameCard
+            client:load
+            slug={game.slug}
+            title={game.title}
+            tagline={game.tagline}
+            coverImage={game.coverImage ?? undefined}
+            players={game.players}
+            duration={game.duration}
+            difficulty={game.difficulty}
+            theme={game.theme}
+            index={i}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>

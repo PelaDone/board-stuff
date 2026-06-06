@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --scrollbar-width: 6px;
+    --scrollbar-color: #4b5563;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-zinc-950 text-zinc-100 font-sans antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-zinc-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-600 rounded-full;
+  }
+}
+
+@layer components {
+  .game-card-glow {
+    box-shadow: 0 0 40px -10px var(--glow-color, rgba(255,255,255,0.1));
+    transition: box-shadow 0.4s ease;
+  }
+
+  .game-card-glow:hover {
+    box-shadow: 0 0 60px -5px var(--glow-color, rgba(255,255,255,0.2));
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .section-divider {
+    @apply border-t border-zinc-800 my-8;
+  }
+}

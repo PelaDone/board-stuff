@@ -1,0 +1,69 @@
+---
+import { marked } from 'marked';
+import { getAllGames, getGameBySlug } from '../../lib/db';
+import GameLayout from '../../layouts/GameLayout.astro';
+import CharacterCard from '../../components/CharacterCard';
+import ChangeHistory from '../../components/ChangeHistory';
+
+export async function getStaticPaths() {
+  const games = await getAllGames();
+  return games.map(g => ({ params: { slug: g.slug } }));
+}
+
+const { slug } = Astro.params;
+const game = await getGameBySlug(slug!);
+
+if (!game) return Astro.redirect('/');
+
+const rulesHtml = marked.parse(game.rules);
+---
+
+<GameLayout game={game}>
+  <!-- Rules -->
+  <div data-section="reglas">
+    <div
+      class="prose prose-invert prose-zinc max-w-none
+        prose-headings:font-display prose-headings:tracking-tight
+        prose-h2:text-2xl prose-h2:border-b prose-h2:border-zinc-800 prose-h2:pb-2
+        prose-a:text-amber-400 prose-a:no-underline hover:prose-a:underline
+        prose-blockquote:border-l-amber-400
+        prose-table:text-sm"
+      set:html={rulesHtml}
+    />
+  </div>
+
+  <!-- Characters -->
+  <div data-section="personajes" style="display:none">
+    {game.characters.length === 0 ? (
+      <div class="text-center py-16 text-zinc-500">
+        <p class="text-4xl mb-3">🧙</p>
+        <p>No hay personajes registrados para este juego.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {game.characters.map((char, i) => (
+          <CharacterCard
+            client:load
+            name={char.name}
+            role={char.role}
+            description={char.description}
+            image={char.image}
+            stats={char.stats}
+            abilities={char.abilities}
+            accent={game.theme.accent}
+            index={i}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Changelog -->
+  <div data-section="historial" style="display:none">
+    <ChangeHistory
+      client:load
+      changelog={game.changelog}
+      accent={game.theme.accent}
+    />
+  </div>
+</GameLayout>

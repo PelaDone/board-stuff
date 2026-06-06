@@ -1,0 +1,97 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { GameSummary } from '../lib/types';
+
+interface Props {
+  game: GameSummary;
+}
+
+const { game } = Astro.props;
+const { title, tagline, description, coverImage, players, duration, difficulty, theme } = game;
+
+const difficultyColor: Record<string, string> = {
+  'Fácil':      'bg-emerald-500/20 text-emerald-300',
+  'Intermedio': 'bg-amber-500/20 text-amber-300',
+  'Difícil':    'bg-orange-500/20 text-orange-300',
+  'Experto':    'bg-red-500/20 text-red-300',
+};
+---
+
+<BaseLayout title={title} description={description} ogImage={coverImage ?? undefined}>
+  <!-- Hero -->
+  <div
+    class="relative min-h-[40vh] flex items-end overflow-hidden"
+    style={`background-color: ${theme.bg};`}
+  >
+    {coverImage && (
+      <div
+        class="absolute inset-0 bg-cover bg-center opacity-25"
+        style={`background-image: url('${coverImage}');`}
+      />
+    )}
+    <div class="absolute inset-0" style={`background: linear-gradient(to top, ${theme.bg} 0%, transparent 60%);`} />
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-20 w-full">
+      <a href="/" class="inline-flex items-center gap-2 text-sm mb-6 opacity-60 hover:opacity-100 transition-opacity" style={`color: ${theme.primary};`}>
+        ← Todos los juegos
+      </a>
+      <h1 class="font-display text-5xl sm:text-7xl font-black tracking-tight mb-3" style={`color: ${theme.primary};`}>
+        {title}
+      </h1>
+      <p class="text-lg sm:text-xl mb-6 max-w-2xl" style={`color: ${theme.secondary};`}>{tagline}</p>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="badge bg-zinc-800/80 text-zinc-300">👥 {players}</span>
+        <span class="badge bg-zinc-800/80 text-zinc-300">⏱ {duration}</span>
+        <span class={`badge ${difficultyColor[difficulty]}`}>{difficulty}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="sticky top-16 z-40 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <nav class="flex gap-1 overflow-x-auto">
+        {[
+          { id: 'reglas',     label: 'Reglas' },
+          { id: 'personajes', label: 'Personajes' },
+          { id: 'historial',  label: 'Historial' },
+        ].map(tab => (
+          <button
+            data-tab={tab.id}
+            class="tab-btn flex-shrink-0 px-4 py-3 text-sm font-medium text-zinc-400 border-b-2 border-transparent hover:text-zinc-100 transition-colors"
+            style={`--accent: ${theme.accent};`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .tab-btn.active {
+    color: white;
+    border-bottom-color: var(--accent);
+  }
+</style>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+  const sections = document.querySelectorAll<HTMLElement>('[data-section]');
+
+  function activate(id: string) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+    sections.forEach(s => {
+      const show = s.dataset.section === id;
+      s.style.display = show ? '' : 'none';
+    });
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
+  activate('reglas');
+</script>
