@@ -29,17 +29,15 @@ export default function GameCard({ slug, title, tagline, coverImage, players, du
       style={{ '--glow-color': theme.accent + '55' } as React.CSSProperties}
     >
       {/* Cover image */}
-      <div className="relative h-48 overflow-hidden" style={{ backgroundColor: theme.bg }}>
+      <div className="relative overflow-hidden" style={{ backgroundColor: theme.bg }}>
         {coverImage && (
           <motion.img
             src={coverImage}
             alt={title}
-            width={600}
-            height={192}
             decoding="async"
             loading="lazy"
-            className="w-full h-full object-cover"
-            whileHover={{ scale: 1.08 }}
+            className="w-full h-full object-contain"
+            whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.5 }}
           />
         )}

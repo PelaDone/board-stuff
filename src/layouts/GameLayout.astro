@@ -19,31 +19,36 @@ const difficultyColor: Record<string, string> = {
 
 <BaseLayout title={title} description={description} ogImage={coverImage ?? undefined}>
   <!-- Hero -->
-  <div
-    class="relative min-h-[40vh] flex items-end overflow-hidden"
-    style={`background-color: ${theme.bg};`}
-  >
+  <div class="relative min-h-[40vh] flex items-end overflow-hidden" style={`background-color: ${theme.bg};`}>
     {coverImage && (
-      <div
-        class="absolute inset-0 bg-cover bg-center opacity-25"
-        style={`background-image: url('${coverImage}');`}
-      />
+      <>
+        <img
+          src={coverImage}
+          alt={title}
+          decoding="async"
+          loading="eager"
+          class="absolute inset-0 w-full h-full object-contain opacity-25"
+        />
+        <div
+          class="absolute inset-0"
+          style={`background: linear-gradient(to top, ${theme.bg} 0%, transparent 60%);`}
+        />
+      </>
     )}
-    <div class="absolute inset-0" style={`background: linear-gradient(to top, ${theme.bg} 0%, transparent 60%);`} />
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-20 w-full">
-      <a href="/" class="inline-flex items-center gap-2 text-sm mb-6 opacity-60 hover:opacity-100 transition-opacity" style={`color: ${theme.primary};`}>
-        ← Todos los juegos
-      </a>
-      <h1 class="font-display text-5xl sm:text-7xl font-black tracking-tight mb-3" style={`color: ${theme.primary};`}>
-        {title}
-      </h1>
-      <p class="text-lg sm:text-xl mb-6 max-w-2xl" style={`color: ${theme.secondary};`}>{tagline}</p>
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="badge bg-zinc-800/80 text-zinc-300">👥 {players}</span>
-        <span class="badge bg-zinc-800/80 text-zinc-300">⏱ {duration}</span>
-        <span class={`badge ${difficultyColor[difficulty]}`}>{difficulty}</span>
-      </div>
+        <a href="/" class="inline-flex items-center gap-2 text-sm mb-6 opacity-60 hover:opacity-100 transition-opacity" style={`color: ${theme.primary};`}>
+          ← Todos los juegos
+        </a>
+        <h1 class="font-display text-5xl sm:text-7xl font-black tracking-tight mb-3" style={`color: ${theme.primary};`}>
+          {title}
+        </h1>
+        <p class="text-lg sm:text-xl mb-6 max-w-2xl" style={`color: ${theme.secondary};`}>{tagline}</p>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="badge bg-zinc-800/80 text-zinc-300">👥 {players}</span>
+          <span class="badge bg-zinc-800/80 text-zinc-300">⏱ {duration}</span>
+          <span class={`badge ${difficultyColor[difficulty]}`}>{difficulty}</span>
+        </div>
     </div>
   </div>
 
