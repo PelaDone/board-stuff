@@ -3,6 +3,8 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
+  site: 'https://PelaDone.github.io',
+  base: '/board-stuff',
   integrations: [
     react(),
     tailwind({ applyBaseStyles: false }),
