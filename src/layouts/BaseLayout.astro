@@ -9,6 +9,7 @@ interface Props {
 
 const { title, description = 'Board Stuff – Reglas, personajes y mecánicas de nuestros juegos de mesa.', ogImage } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321');
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 
 <!doctype html>
@@ -16,7 +17,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
@@ -27,11 +28,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost
   <body class="min-h-screen flex flex-col">
     <header class="sticky top-0 z-50 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-md">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a href="/" class="font-display text-xl font-bold tracking-widest text-zinc-100 hover:text-white transition-colors">
+        <a href={base} class="font-display text-xl font-bold tracking-widest text-zinc-100 hover:text-white transition-colors">
           Board<span class="text-amber-400">Stuff</span>
         </a>
         <div class="flex items-center gap-6 text-sm text-zinc-400">
-          <a href="/#juegos" class="hover:text-zinc-100 transition-colors">Juegos</a>
+          <a href={`${base}#juegos`} class="hover:text-zinc-100 transition-colors">Juegos</a>
         </div>
       </nav>
     </header>
