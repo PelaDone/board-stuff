@@ -40,7 +40,7 @@ const rulesHtml = marked.parse(game.rules);
         <p>No hay personajes registrados para este juego.</p>
       </div>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         {game.characters.map((char, i) => (
           <CharacterCard
             client:load
