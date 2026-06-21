@@ -29,22 +29,33 @@ export default function GameCard({ slug, title, tagline, coverImage, players, du
       style={{ '--glow-color': theme.accent + '55' } as React.CSSProperties}
     >
       {/* Cover image */}
-      <div className="relative overflow-hidden" style={{ backgroundColor: theme.bg }}>
-        {coverImage && (
-          <motion.img
-            src={coverImage}
-            alt={title}
-            decoding="async"
-            loading="lazy"
-            className="w-full h-full object-contain"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.5 }}
-          />
+      <div className="relative h-40 overflow-hidden" style={{ backgroundColor: theme.bg }}>
+        {coverImage ? (
+          <>
+            <motion.img
+              src={coverImage}
+              alt={title}
+              decoding="async"
+              loading="lazy"
+              className="w-full h-full object-contain"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.5 }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: `linear-gradient(to top, ${theme.bg} 0%, transparent 50%)` }}
+            />
+          </>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span
+              className="font-display text-8xl font-black tracking-tight opacity-10 select-none"
+              style={{ color: theme.primary }}
+            >
+              {title.charAt(0)}
+            </span>
+          </div>
         )}
-        <div
-          className="absolute inset-0"
-          style={{ background: `linear-gradient(to top, ${theme.bg} 0%, transparent 50%)` }}
-        />
       </div>
 
       {/* Content */}
