@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 import type { GameSummary } from '../lib/types';
 
 interface Props {
@@ -47,15 +48,15 @@ const difficultyColor: Record<string, string> = {
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pb-10 pt-20 w-full">
         <a href={base} class="inline-flex items-center gap-2 text-sm mb-6 opacity-60 hover:opacity-100 transition-opacity" style={`color: ${theme.primary};`}>
-          ← Todos los juegos
+          <Icon name="lucide:arrow-left" class="w-4 h-4" /> Todos los juegos
         </a>
         <h1 class="font-display text-5xl sm:text-7xl font-black tracking-tight mb-3" style={`color: ${theme.primary};`}>
           {title}
         </h1>
         <p class="text-lg sm:text-xl mb-6 max-w-2xl" style={`color: ${theme.secondary};`}>{tagline}</p>
         <div class="flex flex-wrap items-center gap-3">
-          <span class="badge bg-zinc-800/80 text-zinc-300">👥 {players}</span>
-          <span class="badge bg-zinc-800/80 text-zinc-300">⏱ {duration}</span>
+          <span class="badge bg-zinc-800/80 text-zinc-300 gap-1"><Icon name="lucide:users" class="w-3.5 h-3.5" /> {players}</span>
+          <span class="badge bg-zinc-800/80 text-zinc-300 gap-1"><Icon name="lucide:clock" class="w-3.5 h-3.5" /> {duration}</span>
           <span class={`badge ${difficultyColor[difficulty]}`}>{difficulty}</span>
         </div>
     </div>
@@ -95,17 +96,20 @@ const difficultyColor: Record<string, string> = {
 </style>
 
 <script>
-  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
-  const sections = document.querySelectorAll<HTMLElement>('[data-section]');
+  function initTabs() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const sections = document.querySelectorAll<HTMLElement>('[data-section]');
 
-  function activate(id: string) {
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
-    sections.forEach(s => {
-      const show = s.dataset.section === id;
-      s.style.display = show ? '' : 'none';
-    });
+    function activate(id: string) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+      sections.forEach(s => {
+        s.style.display = s.dataset.section === id ? '' : 'none';
+      });
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
+    activate('reglas');
   }
 
-  tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.tab!)));
-  activate('reglas');
+  document.addEventListener('astro:page-load', initTabs);
 </script>
