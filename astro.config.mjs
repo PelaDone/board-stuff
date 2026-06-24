@@ -11,6 +11,6 @@ export default defineConfig({
     react(),
     tailwind({ applyBaseStyles: false }),
     icon({ include: { lucide: ['*'] } }),
-    compress(),
+    compress({ CSS: false }),
   ],
 });
