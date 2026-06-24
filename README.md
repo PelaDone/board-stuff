@@ -1,42 +1,82 @@
 # Board Stuff
 
-Sitio informativo de juegos de mesa: reglas, personajes, mecánicas e historial de cambios.
+Sitio de referencia para juegos de mesa: reglas, personajes, mecánicas e historial de cambios. Hecho para el grupo.
 
-**Stack:** Astro · React · Tailwind CSS · Motion · MDX
+🌐 **[board-stuff en GitHub Pages](https://PelaDone.github.io/board-stuff)**
 
 ---
 
-## Estructura del proyecto
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Astro 7 (output estático) |
+| UI interactiva | React 19 + Motion |
+| Estilos | Tailwind CSS v3 |
+| Íconos | astro-icon + Iconify (lucide) |
+| Base de datos | Supabase (PostgreSQL) |
+| Optimización | @playform/compress |
+| Hosting | GitHub Pages |
+
+---
+
+## Estructura
 
 ```
 src/
-├── content/
-│   ├── config.ts          ← Schema tipado con Zod
-│   └── games/
-│       ├── catan.mdx      ← Ejemplo con reglas + changelog
-│       └── bang.mdx       ← Ejemplo con personajes + habilidades
-├── layouts/
-│   ├── BaseLayout.astro   ← Nav + footer
-│   └── GameLayout.astro   ← Hero + tabs (Reglas / Personajes / Historial)
-├── pages/
-│   ├── index.astro        ← Home con grilla de juegos
-│   └── games/[slug].astro ← Página dinámica por juego
 ├── components/
-│   ├── GameCard.tsx       ← Card animada con Motion
-│   ├── CharacterCard.tsx  ← Accordion animado con expand/collapse
-│   └── ChangeHistory.tsx  ← Timeline de cambios
+│   ├── GameCard.tsx        ← Card animada (home)
+│   ├── CharacterCard.tsx   ← Accordion expand/collapse
+│   └── ChangeHistory.tsx   ← Timeline de versiones
+├── layouts/
+│   ├── BaseLayout.astro    ← Header + footer + View Transitions
+│   └── GameLayout.astro    ← Hero + tabs (Reglas / Personajes / Historial)
+├── lib/
+│   ├── db.ts               ← Queries a Supabase
+│   ├── supabase.ts         ← Cliente Supabase
+│   └── types.ts            ← Tipos TypeScript
+├── pages/
+│   ├── index.astro         ← Home con grilla de juegos
+│   └── games/[slug].astro  ← Página de juego
 └── styles/global.css
-public/
-└── images/games/          ← Imágenes en formato .webp
+supabase/
+├── schema.sql              ← Esquema completo de tablas
+├── seed.sql                ← Datos de ejemplo
+└── templates/
+    ├── new-game.sql        ← Template para agregar un juego
+    └── update-game.sql     ← Template para editar reglas / changelog
 ```
 
 ---
 
-## Comandos
+## Setup local
+
+### 1. Instalar dependencias
 
 ```bash
-npm run dev      # Servidor de desarrollo
-npm run build    # Build de producción
+npm install
+```
+
+### 2. Variables de entorno
+
+Crear `.env` en la raíz con las claves de Supabase:
+
+```env
+PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+```
+
+Las claves están en **Supabase Dashboard → Project Settings → API**.
+
+### 3. Base de datos
+
+Ejecutar `supabase/schema.sql` en **Supabase Dashboard → SQL Editor** para crear las tablas. Opcionalmente ejecutar `supabase/seed.sql` para cargar datos de ejemplo.
+
+### 4. Comandos
+
+```bash
+npm run dev      # Servidor de desarrollo en localhost:4321
+npm run build    # Build estático en /dist
 npm run preview  # Preview del build
 ```
 
@@ -44,47 +84,42 @@ npm run preview  # Preview del build
 
 ## Agregar un juego
 
-Creá un archivo `.mdx` en `src/content/games/` con el siguiente frontmatter:
+Usar el template `supabase/templates/new-game.sql`: reemplazar los valores entre `<< >>` y ejecutar en el SQL Editor de Supabase. El build del sitio tomará los datos automáticamente.
 
-```yaml
+El template cubre:
+- Datos del juego (título, tema de colores, dificultad, jugadores, duración)
+- Reglas en Markdown (soporta tablas, blockquotes, headings, negrita)
+- Personajes con estadísticas y habilidades (activas/pasivas)
+- Changelog v1.0 inicial
+
+### Colores del tema
+
+Cada juego define su paleta visual con 4 colores hex:
+
+| Campo | Uso |
+|---|---|
+| `theme_primary` | Títulos y texto principal del hero |
+| `theme_secondary` | Subtítulos y tagline |
+| `theme_accent` | Badges, bordes activos, dots del timeline |
+| `theme_bg` | Fondo del hero y las cards |
+
+### Dificultad
+
+Valores válidos: `'Fácil'` · `'Intermedio'` · `'Difícil'` · `'Experto'`
+
+### Tipos de cambio en changelog
+
+| Tipo | Cuándo usarlo |
+|---|---|
+| `rule` | Cambio en una regla del reglamento |
+| `stat` | Modificación de estadística de personaje |
+| `character` | Personaje agregado, removido o renombrado |
+| `mechanic` | Cambio en una mecánica del juego |
+| `balance` | Ajuste de balance (sin cambio de regla) |
+| `clarification` | Aclaración de una regla existente |
+
 ---
-title: "Nombre del juego"
-tagline: "Frase corta"
-description: "Descripción larga"
-coverImage: "/images/games/nombre-cover.webp"
-players: "2–4"
-duration: "30–60 min"
-difficulty: "Fácil" # Fácil | Intermedio | Difícil | Experto
-theme:
-  primary: "#color"
-  secondary: "#color"
-  accent: "#color"
-  bg: "#color"
-publishedAt: "YYYY-MM-DD"
-author: "Nombre"
-characters:
-  - name: "Personaje"
-    role: "Rol"
-    description: "Descripción"
-    image: "/images/games/personaje.webp"  # opcional
-    stats:
-      vida: 4
-      alcance: 1
-    abilities:
-      - name: "Habilidad"
-        description: "Qué hace"
-        passive: true
-changelog:
-  - date: "YYYY-MM-DD"
-    version: "1.0"
-    author: "Nombre"
-    summary: "Resumen del cambio"
-    changes:
-      - type: "rule"  # rule | stat | character | mechanic | balance | clarification
-        description: "Descripción del cambio"
----
-```
 
-El contenido MDX debajo del frontmatter son las reglas del juego (soporta tablas, blockquotes, headings, etc.).
+## Deploy
 
-Las imágenes van en `public/images/games/` en formato `.webp`.
+El sitio se publica automáticamente en GitHub Pages al pushear a `main` (vía GitHub Actions). El build es 100% estático — Supabase se consulta solo en build time.
