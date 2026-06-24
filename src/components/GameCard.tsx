@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Icon } from '@iconify/react';
+import { UsersIcon, ClockIcon } from './icons';
 
 interface GameCardProps {
   slug: string;
@@ -72,8 +72,8 @@ export default function GameCard({ slug, title, tagline, coverImage, players, du
         </p>
 
         <div className="mt-auto flex flex-wrap gap-2 text-xs">
-          <span className="badge bg-zinc-800/80 text-zinc-300 gap-1"><Icon icon="lucide:users" className="w-3.5 h-3.5" /> {players}</span>
-          <span className="badge bg-zinc-800/80 text-zinc-300 gap-1"><Icon icon="lucide:clock" className="w-3.5 h-3.5" /> {duration}</span>
+          <span className="badge bg-zinc-800/80 text-zinc-300 gap-1"><UsersIcon className="w-3.5 h-3.5" /> {players}</span>
+          <span className="badge bg-zinc-800/80 text-zinc-300 gap-1"><ClockIcon className="w-3.5 h-3.5" /> {duration}</span>
           <span
             className="badge"
             style={{ backgroundColor: theme.accent + '30', color: theme.accent }}

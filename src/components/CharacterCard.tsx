@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
-import { Icon } from '@iconify/react';
+import { ChevronDownIcon } from './icons';
 
 interface Ability {
   name: string;
@@ -54,7 +54,7 @@ export default function CharacterCard({ name, role, description, image, stats, a
           transition={{ duration: 0.25 }}
           className="text-zinc-500 flex-shrink-0"
         >
-          <Icon icon="lucide:chevron-down" className="w-5 h-5" />
+          <ChevronDownIcon className="w-5 h-5" />
         </motion.span>
       </button>
 
